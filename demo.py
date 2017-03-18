@@ -39,23 +39,27 @@ def getCode(url):
     # print currentUrl
     return currentUrl.split('=')[1]
 
+def outPut(data):
+    a = json.dumps(data, ensure_ascii=False, indent=2)
+    fout = io.open('test','w',encoding='utf-8')
+    fout.write(a)
+
+def getData(code):
+    r = client.request_access_token(code)
+    access_token = r.access_token
+    expires_in = r.expires_in
+
+    client.set_access_token(access_token, expires_in)
+
+    res = client.statuses.public_timeline.get(count=2)
+    # res  = client.statuses.user_timeline.get(uid=3937348351)
+    # res=client.emotions.get()
+    # res = client.friendships.friends.get(uid=3937348351)
+    # res = client.users.show.get(uid=5407847973)
+    return res
 
 code = getCode(url)
+data = getData(code)
+outPut(data)
 print 'code:'+code
 driver.quit()
-
-client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALLBACK_URL)
-r = client.request_access_token(code)
-access_token = r.access_token
-expires_in = r.expires_in
-
-client.set_access_token(access_token, expires_in)
-
-res = client.statuses.public_timeline.get(count=1)
-# res  = client.statuses.user_timeline.get(uid=3937348351)
-# res=client.emotions.get()
-# res = client.friendships.friends.get(uid=3937348351)
-# res = client.users.show.get(uid=5407847973)
-a = json.dumps(res, ensure_ascii = False,indent = 2)
-fout = io.open('test','w',encoding='utf-8')
-fout.write(a)
