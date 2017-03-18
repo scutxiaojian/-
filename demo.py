@@ -1,24 +1,24 @@
 from time import sleep
-
 from weibo import APIClient
 import json
-import webbrowser
 import io
-import urllib
 from selenium import webdriver
+import ConfigParser
 from selenium.webdriver.common.keys import Keys
 
-APP_KEY = '837865545'
-APP_SECRET = 'aa7f24832f1aafaca9eab44008f9ae54'
-CALLBACK_URL = 'http://api.weibo.com/oauth2/default.html'
-USERID = '541999948@qq.com'
-USERPASSWD = '1994323..cx'
+cf = ConfigParser.ConfigParser()
+cf.read("config.ini")
+APP_KEY = cf.get('weibo','APP_KEY')
+APP_SECRET = cf.get('weibo','APP_SECRET')
+CALLBACK_URL = cf.get('weibo','CALLBACK_URL')
+USERID = cf.get('weibo','USERID')
+USERPASSWD = cf.get('weibo','USERPASSWD')
 
 driver = webdriver.PhantomJS(executable_path='/home/cxj/Downloads/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
 
 client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALLBACK_URL)
 url = client.get_authorize_url()
-print url
+# print url
 
 def getCurrentUrl(url):
     driver.get(url)
@@ -40,10 +40,9 @@ def getCode(url):
     return currentUrl.split('=')[1]
 
 
-
 code = getCode(url)
+print 'code:'+code
 driver.quit()
-
 
 client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALLBACK_URL)
 r = client.request_access_token(code)
@@ -52,7 +51,7 @@ expires_in = r.expires_in
 
 client.set_access_token(access_token, expires_in)
 
-res = client.statuses.public_timeline.get(count=20)
+res = client.statuses.public_timeline.get(count=1)
 # res  = client.statuses.user_timeline.get(uid=3937348351)
 # res=client.emotions.get()
 # res = client.friendships.friends.get(uid=3937348351)
