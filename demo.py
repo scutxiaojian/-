@@ -18,9 +18,9 @@ driver = webdriver.PhantomJS(executable_path='/home/cxj/Downloads/phantomjs-2.1.
 
 client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALLBACK_URL)
 url = client.get_authorize_url()
-# print url
+print url
 
-def getCurrentUrl():
+def getCurrentUrl(url):
     driver.get(url)
     userId = driver.find_element_by_xpath("//*[@id='userId']")
     userId.send_keys(USERID)
@@ -31,17 +31,17 @@ def getCurrentUrl():
     sleep(2)
     return driver.current_url
 
-def getCode():
-    currentUrl = getCurrentUrl()
+def getCode(url):
+    currentUrl = getCurrentUrl(url)
     while 'code'not in currentUrl:
         sleep(1)
-        currentUrl = getCurrentUrl()
+        currentUrl = getCurrentUrl(url)
     # print currentUrl
     return currentUrl.split('=')[1]
 
 
 
-code = getCode()
+code = getCode(url)
 driver.quit()
 
 
