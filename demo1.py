@@ -18,20 +18,22 @@ USERPASSWD = cf.get('weibo','USERPASSWD')
 dcap = dict(DesiredCapabilities.PHANTOMJS)
 dcap["phantomjs.page.settings.userAgent"] = (UserAgent)
 
-driver = webdriver.Firefox(executable_path='/usr/bin/firefox')
+driver = webdriver.PhantomJS(executable_path=phantomjsPath,desired_capabilities=dcap)
+driver.set_window_size(1440, 900)
 driver.get(LoginUrl)
-
-# userId = driver.find_element_by_xpath("//*[@id='pl_login_form']/div/div[1]/div/a[1]")
-# userId.send_keys(USERID)
-# password = driver.find_element_by_xpath("//*[@id='pl_login_form']/div/div[3]/div[2]/div/input")
-# password.send_keys(USERPASSWD)
 sleep(2)
+userId = driver.find_element_by_xpath("//*[@id='loginname']")
+userId.send_keys(USERID)
+password = driver.find_element_by_xpath("//*[@id='pl_login_form']/div/div[3]/div[2]/div/input")
+password.send_keys(USERPASSWD)
+sleep(1)
+driver.find_element_by_xpath("//*[@id='pl_login_form']/div/div[3]/div[6]/a/span").click()
+sleep(2)
+
 # f = io.open('source','w',encoding='utf-8')
 # f.write(driver.page_source)
 # sleep(2)
 driver.get_screenshot_as_file('01.png')
-
-
 
 driver.quit()
 

@@ -18,7 +18,6 @@ def get_code(url):
     print 'authUrl:'+url
     driver = webdriver.PhantomJS(executable_path=phantomjsPath, desired_capabilities=dcap)
     driver.get(url)
-    sleep(2)
     while 'http://api.weibo.com/oauth2/default.html?code=' not in driver.current_url and codetime != 8:
         print 'login_'+str(codetime)
         try:
