@@ -69,15 +69,19 @@ def get_data(code):
 
 cf = ConfigParser.ConfigParser()
 cf.read("config.ini")
+
 APP_KEY = cf.get('weibo','APP_KEY')
 APP_SECRET = cf.get('weibo','APP_SECRET')
 CALLBACK_URL = cf.get('weibo','CALLBACK_URL')
+
 USERID = cf.get('weibo','USERID')
 USERPASSWD = cf.get('weibo','USERPASSWD')
+
 phantomjsPath=cf.get('path','phantomjsPath')
 
 UA = eval(cf.get('UA', 'UA'))
 UserAgent = UA[random.randint(0, 3)]
+
 dcap = dict(DesiredCapabilities.PHANTOMJS)
 dcap["phantomjs.page.settings.userAgent"] = (UserAgent)
 
